@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.ganknews.base.BaseFragment;
+import com.example.ganknews.gank.GankFragment;
 
 import java.util.HashMap;
 
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -78,7 +80,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            changeFragment("camera");
+//            changeFragment("camera");
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            GankFragment gankFragment = new GankFragment();
+            transaction.add(R.id.content_main,gankFragment);
+            transaction.show(gankFragment);
+            transaction.commitAllowingStateLoss();
         } else if (id == R.id.nav_gallery) {
             changeFragment("gallery");
         } else if (id == R.id.nav_slideshow) {
@@ -112,7 +119,6 @@ public class MainActivity extends AppCompatActivity
 
     private void replaceFragment(BaseFragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//        transaction.replace(R.id.content_main, fragment);
         if (currFragment != null) {
             transaction.hide(currFragment);
         }
