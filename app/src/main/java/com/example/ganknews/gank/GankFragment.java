@@ -22,7 +22,9 @@ import java.util.List;
  * Created by zhuangsj on 16-10-9.
  */
 
-public class GankFragment extends Fragment {
+public class GankFragment extends BaseFragment {
+
+    public static final String TAG = GankFragment.class.getSimpleName();
 
     @Nullable
     @Override
@@ -35,9 +37,8 @@ public class GankFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(BaseFragment.newInstance("1"), "Category 1");
-        adapter.addFragment(BaseFragment.newInstance("2"), "Category 2");
-        adapter.addFragment(BaseFragment.newInstance("3"), "Category 3");
+        adapter.addFragment(new NewsFragment(), "Category 1");
+        adapter.addFragment(new NewsFragment1(), "Category 2");
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);

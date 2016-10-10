@@ -21,7 +21,7 @@ public class L {
     private static String getTraceInfo() {
         StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
         String clazz = stacktrace[4].getClassName();
-        return clazz.substring(clazz.lastIndexOf(".")) + "->" + stacktrace[4].getMethodName();
+        return clazz.substring(clazz.lastIndexOf(".") + 1) + "->" + stacktrace[4].getMethodName();
     }
 
     private static String getTraceInfo(Exception e) {

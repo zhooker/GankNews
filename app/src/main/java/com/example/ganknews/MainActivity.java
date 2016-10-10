@@ -1,11 +1,7 @@
 package com.example.ganknews;
 
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -80,18 +76,13 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-//            changeFragment("camera");
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            GankFragment gankFragment = new GankFragment();
-            transaction.add(R.id.content_main,gankFragment);
-            transaction.show(gankFragment);
-            transaction.commitAllowingStateLoss();
+            changeFragment(GankFragment.TAG);
         } else if (id == R.id.nav_gallery) {
-            changeFragment("gallery");
+            changeFragment(GankFragment.TAG);
         } else if (id == R.id.nav_slideshow) {
-            changeFragment("slideshow");
+            changeFragment(GankFragment.TAG);
         } else if (id == R.id.nav_manage) {
-            changeFragment("manage");
+
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -103,18 +94,22 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void changeFragment(String guid) {
-        BaseFragment fragment = fragments.get(guid);
-        if (fragment == null) {
-            fragment = new BaseFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(BaseFragment.GUID, guid);
-            fragment.setArguments(bundle);
-            getFragmentManager().beginTransaction().add(R.id.content_main,fragment).commitAllowingStateLoss();
-            fragments.put(guid, fragment);
+    private BaseFragment createBaseFragment(String tag) {
+        if (GankFragment.TAG.equals(tag)) {
+            return new GankFragment();
         }
-        replaceFragment(fragment);
+        return null;
+    }
 
+    private void changeFragment(String tag) {
+        BaseFragment fragment = fragments.get(tag);
+        if (fragment == null) {
+            fragment = createBaseFragment(tag);
+            getFragmentManager().beginTransaction().add(R.id.content_main, fragment).commitAllowingStateLoss();
+            fragments.put(tag, fragment);
+        }
+        if (currFragment != fragment)
+            replaceFragment(fragment);
     }
 
     private void replaceFragment(BaseFragment fragment) {
