@@ -1,4 +1,4 @@
-package com.example.ganknews.gank;
+package com.example.ganknews.gank.ui;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -37,8 +37,9 @@ public class GankFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(new NewsFragment(), "Category 1");
-        adapter.addFragment(new NewsFragment1(), "Category 2");
+        adapter.addFragment(new NewsFragment(), "Android");
+        adapter.addFragment(new NewsFragment(), "IOS");
+        adapter.addFragment(new NewsFragment(), "Web");
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);

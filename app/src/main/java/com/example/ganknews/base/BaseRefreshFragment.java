@@ -43,7 +43,7 @@ public class BaseRefreshFragment extends BaseFragment implements SwipeRefreshLay
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                loadData(10);
+                loadData(page);
             }
         });
     }
@@ -55,7 +55,7 @@ public class BaseRefreshFragment extends BaseFragment implements SwipeRefreshLay
             public void run() {
                 setRefresh(false);
             }
-        }, 500);
+        }, 0);
     }
 
     protected void loadData(int page) {
