@@ -1,6 +1,7 @@
 package com.example.ganknews.gank.presenter;
 
 import com.example.ganknews.gank.model.GankInfo;
+import com.example.ganknews.util.L;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +25,9 @@ public class GankPresenter implements GankContacts.IGankPresenter {
             @Override
             public void run() {
                 viewModle.refreshList(getData());
+                L.d();
             }
-        }, 2000);
+        }, 500);
     }
 
     protected List<GankInfo> getData() {

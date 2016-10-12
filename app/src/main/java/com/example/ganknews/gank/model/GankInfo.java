@@ -32,4 +32,13 @@ public class GankInfo {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "GankInfo{" +
+                "author='" + author + '\'' +
+                ", description='" + description + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
 }

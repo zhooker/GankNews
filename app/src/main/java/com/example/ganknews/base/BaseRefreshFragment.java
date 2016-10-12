@@ -21,20 +21,19 @@ public class BaseRefreshFragment extends BaseFragment implements SwipeRefreshLay
 
     protected SwipeRefreshLayout mSwipeRefreshLayout;
     protected RecyclerView mRecyclerView;
+    protected View mContent;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View content = inflater.inflate(R.layout.fragment_base, null);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) content.findViewById(R.id.id_refreshlayout);
-        mRecyclerView = (RecyclerView) content.findViewById(R.id.id_recyclerview);
-        return content;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        initRecyclerView(mRecyclerView);
+        if (mContent == null) {
+            mContent = inflater.inflate(R.layout.fragment_base, null);
+            mSwipeRefreshLayout = (SwipeRefreshLayout) mContent.findViewById(R.id.id_refreshlayout);
+            mRecyclerView = (RecyclerView) mContent.findViewById(R.id.id_recyclerview);
+            mSwipeRefreshLayout.setOnRefreshListener(this);
+            initRecyclerView(mRecyclerView);
+        }
+        return mContent;
     }
 
     protected void initRecyclerView(RecyclerView recyclerView) {
@@ -56,6 +55,10 @@ public class BaseRefreshFragment extends BaseFragment implements SwipeRefreshLay
                 setRefresh(false);
             }
         }, 0);
+    }
+
+    protected void loadData() {
+
     }
 
     protected void loadData(int page) {

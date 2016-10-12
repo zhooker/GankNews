@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.ganknews.R;
 import com.example.ganknews.base.BaseFragment;
+import com.example.ganknews.util.L;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,13 +36,12 @@ public class GankFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(new NewsFragment(), "Android");
-        adapter.addFragment(new NewsFragment(), "IOS");
-        adapter.addFragment(new NewsFragment(), "Web");
+        adapter.addFragment(new AndroidFragment(), "Android");
+        adapter.addFragment(new IOSFragment(), "IOS");
+        adapter.addFragment(new WebFragment(), "Web");
         viewPager.setAdapter(adapter);
-
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -49,6 +49,11 @@ public class GankFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+    }
+
+    @Override
+    protected void loadData() {
+
     }
 
     @Override
@@ -90,5 +95,4 @@ public class GankFragment extends BaseFragment {
             return mFragmentTitles.get(position);
         }
     }
-
 }
