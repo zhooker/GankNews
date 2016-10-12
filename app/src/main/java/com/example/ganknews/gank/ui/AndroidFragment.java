@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.example.ganknews.BR;
 import com.example.ganknews.R;
 import com.example.ganknews.base.BaseRefreshFragment;
 import com.example.ganknews.base.BindingListAdapter;
