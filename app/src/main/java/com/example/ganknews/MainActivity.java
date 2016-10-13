@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.ganknews.base.BaseFragment;
+import com.example.ganknews.gank.girl.GirlFragment;
 import com.example.ganknews.gank.ui.GankFragment;
 
 import java.util.HashMap;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             changeFragment(GankFragment.TAG);
         } else if (id == R.id.nav_gallery) {
-
+            changeFragment(GirlFragment.TAG);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -105,6 +106,9 @@ public class MainActivity extends AppCompatActivity
         if (GankFragment.TAG.equals(tag)) {
             return new GankFragment();
         }
+        if (GirlFragment.TAG.equals(tag)) {
+            return new GirlFragment();
+        }
         return null;
     }
 
@@ -112,6 +116,8 @@ public class MainActivity extends AppCompatActivity
         BaseFragment fragment = fragments.get(tag);
         if (fragment == null) {
             fragment = createBaseFragment(tag);
+            if (fragment == null)
+                return;
             getFragmentManager().beginTransaction().add(R.id.content_main, fragment).commitAllowingStateLoss();
             fragments.put(tag, fragment);
         }
