@@ -1,10 +1,16 @@
 package com.example.ganknews.gank.presenter;
 
+import com.example.ganknews.gank.http.HttpHelper;
 import com.example.ganknews.gank.model.GankInfo;
+import com.example.ganknews.gank.model.GankInfoList;
 import com.example.ganknews.util.L;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zhooker on 2016/10/11.
@@ -21,29 +27,18 @@ public class GankPresenter implements GankContacts.IGankPresenter {
 
     @Override
     public void loadData() {
-        new android.os.Handler().postDelayed(new Runnable() {
+        Call<GankInfoList> call = HttpHelper.getInstance(null).getGankInfoListCall("Android", 10, 1);
+        call.enqueue(new Callback<GankInfoList>() {
             @Override
-            public void run() {
-                viewModle.refreshList(getData());
-                L.d();
+            public void onResponse(Call<GankInfoList> call, Response<GankInfoList> response) {
+                viewModle.refreshList(response.body() != null ? response.body().getResults() : null);
             }
-        }, 500);
-    }
 
-    protected List<GankInfo> getData() {
-        List<GankInfo> mDatas = new ArrayList<GankInfo>();
-        for (int i = 'A'; i < 'Z'; i++) {
-            GankInfo info = new GankInfo();
-            info.setAuthor("" + (char) i);
-            info.setDate("");
-            StringBuilder sb = new StringBuilder();
-            for (int j = 'A'; j < 'Z'; j++) {
-                sb.append((char) j);
+            @Override
+            public void onFailure(Call<GankInfoList> call, Throwable t) {
+                L.d(t);
             }
-            info.setDescription(sb.toString());
-            mDatas.add(info);
-        }
-        return mDatas;
+        });
     }
 
 

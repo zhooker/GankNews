@@ -45,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{info.description}" />
+                    android:text="@{info.desc}"/>
             </LinearLayout>
 
             <FrameLayout
@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:drawableLeft="@drawable/ic_account_circle_black_18dp"
-                    android:text="@{info.author}" />
+                    android:text="@{info.who}" />
 
                 <TextView
                     android:id="@+id/date"
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:drawableLeft="@drawable/ic_alarm_black_18dp"
-                    android:text="@{info.date}" />
+                    android:text="@{info.publishedAt}" />
             </FrameLayout>
 
         </LinearLayout>
