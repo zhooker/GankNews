@@ -11,6 +11,13 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.adapter.rxjava.HttpException;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by zhooker on 2016/10/11.
@@ -19,6 +26,11 @@ import retrofit2.Response;
 public class GankPresenter implements GankContacts.IGankPresenter {
 
     private GankContacts.IGankView viewModle;
+    private CompositeSubscription compositeSubscription ;
+
+    public GankPresenter() {
+        compositeSubscription = new CompositeSubscription();
+    }
 
     @Override
     public void bindView(GankContacts.IGankView view) {
@@ -27,23 +39,36 @@ public class GankPresenter implements GankContacts.IGankPresenter {
 
     @Override
     public void loadData() {
-        Call<GankInfoList> call = HttpHelper.getInstance(null).getGankInfoListCall("Android", 10, 1);
-        call.enqueue(new Callback<GankInfoList>() {
-            @Override
-            public void onResponse(Call<GankInfoList> call, Response<GankInfoList> response) {
-                viewModle.refreshList(response.body() != null ? response.body().getResults() : null);
-            }
+        Observable<GankInfoList> call = HttpHelper.getInstance(null).getGankInfoListCall("Android", 10, 1);
+        Subscription subscription = call
+                .subscribeOn(Schedulers.io()) // optional if you do not wish to override the default behavior
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GankInfoList>() {
+                    @Override
+                    public void onCompleted() {
+                        L.d();
+                    }
 
-            @Override
-            public void onFailure(Call<GankInfoList> call, Throwable t) {
-                L.d(t);
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        L.d(e);
+                    }
+
+                    @Override
+                    public void onNext(GankInfoList user) {
+                        viewModle.refreshList(user != null ? user.getResults() : null);
+                    }
+                });
+        compositeSubscription.add(subscription);
     }
 
 
     @Override
     public void loadMoreData() {
 
+    }
+
+    @Override
+    public void finish() {
+        compositeSubscription.unsubscribe();
     }
 }

@@ -19,5 +19,7 @@ public interface GankContacts {
         void loadData();
 
         void loadMoreData();
+
+        void finish();
     }
 }

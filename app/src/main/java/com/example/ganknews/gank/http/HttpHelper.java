@@ -3,12 +3,14 @@ package com.example.ganknews.gank.http;
 import android.content.Context;
 
 import com.example.ganknews.gank.model.GankInfoList;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import retrofit2.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by zhooker on 2016/10/12.
@@ -19,17 +21,7 @@ public class HttpHelper {
     private static final String BASE_URL = "http://gank.io/api/";
     private static HttpHelper mHttpHelper;
 
-    private Retrofit retrofit;
-
     private HttpHelper() {
-        Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-                .create();
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
     }
 
     public static HttpHelper getInstance(Context context) {
@@ -43,7 +35,19 @@ public class HttpHelper {
         return mHttpHelper;
     }
 
-    public Call<GankInfoList> getGankInfoListCall(String category, int size, int page) {
+    public Observable<GankInfoList> getGankInfoListCall(String category, int size, int page) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+        // See http://square.github.io/okhttp/3.x/logging-interceptor/
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        builder.networkInterceptors().add(httpLoggingInterceptor);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(builder.build())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .build();
         GankApiInterface apiInterface = retrofit.create(GankApiInterface.class);
         return apiInterface.getCatagoryNews(category, size, page);
     }
