@@ -17,7 +17,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        L.d(savedInstanceState +","+ isVisible());
+        L.d(savedInstanceState + "," + isVisible() + ",name=" + getClass().getSimpleName());
         if (!isLoaded) {
             loadData();
             isLoaded = true;

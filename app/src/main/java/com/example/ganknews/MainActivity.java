@@ -2,6 +2,7 @@ package com.example.ganknews;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,9 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.ganknews.about.AboutFragment;
 import com.example.ganknews.base.BaseFragment;
 import com.example.ganknews.gank.girl.GirlFragment;
 import com.example.ganknews.gank.ui.GankFragment;
+import com.example.ganknews.setting.SettingFragment;
 
 import java.util.HashMap;
 
@@ -37,12 +40,14 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
 
+        navigationView.setCheckedItem(R.id.nav_news);
+        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_news));
+    }
+    
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        changeFragment(GankFragment.TAG);
     }
 
     @Override
@@ -83,31 +88,31 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_news) {
             changeFragment(GankFragment.TAG);
         } else if (id == R.id.nav_gallery) {
             changeFragment(GirlFragment.TAG);
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_setting) {
+            changeFragment(SettingFragment.TAG);
+        } else if (id == R.id.nav_about) {
+            changeFragment(AboutFragment.TAG);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        setTitle(item.getTitle());
         return true;
     }
 
     private BaseFragment createBaseFragment(String tag) {
         if (GankFragment.TAG.equals(tag)) {
             return new GankFragment();
-        }
-        if (GirlFragment.TAG.equals(tag)) {
+        } else if (GirlFragment.TAG.equals(tag)) {
             return new GirlFragment();
+        } else if (SettingFragment.TAG.equals(tag)) {
+            return new SettingFragment();
+        } else if (AboutFragment.TAG.equals(tag)) {
+            return new AboutFragment();
         }
         return null;
     }
