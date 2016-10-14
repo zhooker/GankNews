@@ -17,6 +17,7 @@ import com.example.ganknews.about.AboutFragment;
 import com.example.ganknews.base.BaseFragment;
 import com.example.ganknews.gank.girl.GirlFragment;
 import com.example.ganknews.gank.ui.GankFragment;
+import com.example.ganknews.setting.PrefsFragement;
 import com.example.ganknews.setting.SettingFragment;
 
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setCheckedItem(R.id.nav_news);
         onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_news));
     }
-    
+
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -93,7 +94,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             changeFragment(GirlFragment.TAG);
         } else if (id == R.id.nav_setting) {
-            changeFragment(SettingFragment.TAG);
+//            changeFragment(SettingFragment.TAG);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.content_main, new PrefsFragement());
+            transaction.commitAllowingStateLoss();
         } else if (id == R.id.nav_about) {
             changeFragment(AboutFragment.TAG);
         }
