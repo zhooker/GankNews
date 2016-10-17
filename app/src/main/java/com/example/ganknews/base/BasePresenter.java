@@ -1,5 +1,7 @@
 package com.example.ganknews.base;
 
+import com.example.ganknews.util.L;
+
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -21,18 +23,23 @@ public abstract class BasePresenter<T extends BaseView> {
         unsubscribe();
     }
 
-    private void assertCompositeSubscription() {
+    protected void addSubscriiption(Subscription subscription) {
+        if (compositeSubscription == null)
+            L.d();
+        else
+            L.d(compositeSubscription.hasSubscriptions());
         if (compositeSubscription == null)
             compositeSubscription = new CompositeSubscription();
-    }
-
-    protected void addSubscriiption(Subscription subscription) {
-        assertCompositeSubscription();
+        else
+            compositeSubscription.clear();
         compositeSubscription.add(subscription);
     }
 
     protected void unsubscribe() {
-        assertCompositeSubscription();
-        compositeSubscription.unsubscribe();
+        if (compositeSubscription != null) {
+            //zhuangsj:unsubscribe之后，新add进来的Subscription会直接被unsubscribe
+            compositeSubscription.unsubscribe();
+            compositeSubscription = null;
+        }
     }
 }

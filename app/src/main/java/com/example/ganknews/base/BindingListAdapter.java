@@ -28,6 +28,17 @@ public abstract class BindingListAdapter<M, VB extends ViewDataBinding>
         this.mDatas = list;
     }
 
+    public void addAll(List<M> list) {
+        if (mDatas != null)
+            mDatas.addAll(list);
+    }
+
+    public void addLast(List<M> list) {
+        if (mDatas != null) {
+            mDatas.addAll(mDatas.size(), list);
+        }
+    }
+
     public void add(M item) {
         if (mDatas != null)
             mDatas.add(item);

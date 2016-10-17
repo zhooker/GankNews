@@ -26,11 +26,24 @@ import rx.subscriptions.CompositeSubscription;
 
 public class GankPresenter extends BasePresenter<GankContacts.IGankView> implements GankContacts.IGankPresenter {
 
+    private int currPage = 1;
+
     @Override
     public void loadData() {
-        Observable<GankInfoList> call = HttpHelper.getInstance(null).getGankInfoListCall("Android", 10, 1);
+        currPage = 1;
+        loadDataByPage(currPage, false);
+    }
+
+
+    @Override
+    public void loadMoreData() {
+        loadDataByPage(++currPage, true);
+    }
+
+    private void loadDataByPage(final int page, final boolean addLast) {
+        Observable<GankInfoList> call = HttpHelper.getInstance(null).getGankInfoListCall("Android", 10, page);
         Subscription subscription = call
-                .subscribeOn(Schedulers.io()) // optional if you do not wish to override the default behavior
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GankInfoList>() {
                     @Override
                     public void onCompleted() {
@@ -40,19 +53,17 @@ public class GankPresenter extends BasePresenter<GankContacts.IGankView> impleme
                     @Override
                     public void onError(Throwable e) {
                         L.d(e);
+                        mView.showError(-1);
                     }
 
                     @Override
                     public void onNext(GankInfoList user) {
-                        mView.refreshList(user != null ? user.getResults() : null);
+                        if (addLast)
+                            mView.refreshMoreList(user != null ? user.getResults() : null);
+                        else
+                            mView.refreshList(user != null ? user.getResults() : null);
                     }
                 });
         addSubscriiption(subscription);
-    }
-
-
-    @Override
-    public void loadMoreData() {
-
     }
 }

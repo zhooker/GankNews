@@ -23,7 +23,7 @@ import java.util.List;
  */
 
 public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
-        implements GankContacts.IGankView, ItemClickSupport.OnItemClickListener {
+        implements GankContacts.IGankView {
 
     public static final String TAG = AndroidFragment.class.getSimpleName();
     private HomeAdapter mAdapter;
@@ -32,7 +32,6 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
     protected void initRecyclerView(RecyclerView recyclerView) {
         super.initRecyclerView(recyclerView);
         recyclerView.setAdapter(mAdapter = new HomeAdapter());
-        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(this);
     }
 
     @Override
@@ -43,20 +42,28 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
     @Override
     public void refreshList(List<GankInfo> list) {
         mAdapter.clear();
-        for (GankInfo info : list) {
-            mAdapter.add(info);
-        }
+        mAdapter.addAll(list);
         mAdapter.notifyDataSetChanged();
+        setRefresh(false);
+    }
+
+    @Override
+    public void refreshMoreList(List<GankInfo> list) {
+        mAdapter.addLast(list);
+        mAdapter.notifyDataSetChanged();
+        setRefresh(false);
     }
 
     @Override
     protected void loadData() {
+        L.d();
         mPresenter.loadData();
     }
 
     @Override
-    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-        L.d(position);
+    protected void loadMoreData() {
+        L.d();
+        mPresenter.loadMoreData();
     }
 
     static class HomeAdapter extends BindingListAdapter<GankInfo, FragmentListItemBinding> {
@@ -82,5 +89,11 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
     public void onAttach(Context context) {
         super.onAttach(context);
         L.d();
+    }
+
+    @Override
+    public void onDestroy() {
+        L.d();
+        super.onDestroy();
     }
 }

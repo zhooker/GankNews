@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
+import com.example.ganknews.util.L;
+
 /**
  * Created by zhuangsj on 16-10-10.
  */
@@ -84,7 +86,6 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
             loading = false;
             previousTotalItemCount = totalItemCount;
         }
-
         // If it isn’t currently loading, we check to see if we have breached
         // the visibleThreshold and need to reload more data.
         // If we do need to reload some more data, we execute onLoadMore to fetch the data.

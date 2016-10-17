@@ -12,6 +12,8 @@ import java.util.List;
 public interface GankContacts {
     interface IGankView extends BaseView {
         void refreshList(List<GankInfo> list);
+
+        void refreshMoreList(List<GankInfo> list);
     }
 
     interface IGankPresenter {

@@ -12,9 +12,13 @@ import java.util.List;
 public interface GankGirlContacts {
     interface IGankView extends BaseView {
         void refreshList(List<GankInfo> list);
+
+        void refreshMoreList(List<GankInfo> list);
     }
 
     interface IGankPresenter {
         void loadData();
+
+        void loadMoreData();
     }
 }

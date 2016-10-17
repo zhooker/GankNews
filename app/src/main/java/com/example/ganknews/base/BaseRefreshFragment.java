@@ -62,27 +62,29 @@ public abstract class BaseRefreshFragment<T extends BasePresenter> extends BaseF
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-
+                setRefresh(true);
+                loadMoreData();
             }
         });
     }
 
     @Override
     public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setRefresh(false);
-            }
-        }, 0);
+        setRefresh(true);
+        loadData();
     }
 
     @Override
     public void showError(int code) {
+        setRefresh(false);
         mSwitcher.setDisplayedChild(1);
     }
 
     protected void loadData() {
+
+    }
+
+    protected void loadMoreData() {
 
     }
 

@@ -1,5 +1,6 @@
 package com.example.ganknews;
 
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -94,10 +95,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             changeFragment(GirlFragment.TAG);
         } else if (id == R.id.nav_setting) {
-//            changeFragment(SettingFragment.TAG);
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.content_main, new PrefsFragement());
-            transaction.commitAllowingStateLoss();
+            changeFragment(PrefsFragement.TAG);
         } else if (id == R.id.nav_about) {
             changeFragment(AboutFragment.TAG);
         }
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private BaseFragment createBaseFragment(String tag) {
+    private Fragment createBaseFragment(String tag) {
         if (GankFragment.TAG.equals(tag)) {
             return new GankFragment();
         } else if (GirlFragment.TAG.equals(tag)) {
@@ -117,12 +115,14 @@ public class MainActivity extends AppCompatActivity
             return new SettingFragment();
         } else if (AboutFragment.TAG.equals(tag)) {
             return new AboutFragment();
+        } else if (PrefsFragement.TAG.equals(tag)) {
+            return new PrefsFragement();
         }
         return null;
     }
 
     private void changeFragment(String tag) {
-        BaseFragment fragment = fragments.get(tag);
+        Fragment fragment = fragments.get(tag);
         if (fragment == null) {
             fragment = createBaseFragment(tag);
             if (fragment == null)
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity
             replaceFragment(fragment);
     }
 
-    private void replaceFragment(BaseFragment fragment) {
+    private void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         if (currFragment != null) {
             transaction.hide(currFragment);
@@ -144,6 +144,6 @@ public class MainActivity extends AppCompatActivity
         transaction.commitAllowingStateLoss();
     }
 
-    private HashMap<String, BaseFragment> fragments = new HashMap<>(5);
-    private BaseFragment currFragment;
+    private HashMap<String, Fragment> fragments = new HashMap<>(5);
+    private Fragment currFragment;
 }

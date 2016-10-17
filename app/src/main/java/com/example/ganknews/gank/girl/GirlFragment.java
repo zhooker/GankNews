@@ -34,6 +34,12 @@ public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> impleme
     }
 
     @Override
+    protected void loadMoreData() {
+        mPresenter.loadMoreData();
+    }
+
+
+    @Override
     protected GankGirlPresenter initPresenter() {
         return new GankGirlPresenter();
     }
@@ -45,6 +51,14 @@ public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> impleme
             mAdapter.add(info);
         }
         mAdapter.notifyDataSetChanged();
+        setRefresh(false);
+    }
+
+    @Override
+    public void refreshMoreList(List<GankInfo> list) {
+        mAdapter.addLast(list);
+        mAdapter.notifyDataSetChanged();
+        setRefresh(false);
     }
 
     static class HomeAdapter extends BindingListAdapter<GankInfo, FragmentGirlItemBinding> {

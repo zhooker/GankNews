@@ -17,7 +17,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        L.d(savedInstanceState +","+ isVisible());
         if (!isLoaded) {
             loadData();
             isLoaded = true;
@@ -27,7 +26,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        L.d(hidden);
         if (!isLoaded && !hidden) {
             loadData();
             isLoaded = true;
@@ -35,15 +33,9 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @Override
-    public void onAttachFragment(Fragment childFragment) {
-        L.d();
-        super.onAttachFragment(childFragment);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        isLoaded = false;
+    public void onDestroy() {
+        super.onDestroy();
+        //isLoaded = false;
     }
 
     protected abstract void loadData();
