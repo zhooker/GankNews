@@ -22,34 +22,22 @@ import java.util.List;
  * Created by zhuangsj on 16-10-10.
  */
 
-public class AndroidFragment extends BaseRefreshFragment implements GankContacts.IGankView, ItemClickSupport.OnItemClickListener {
+public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
+        implements GankContacts.IGankView, ItemClickSupport.OnItemClickListener {
 
     public static final String TAG = AndroidFragment.class.getSimpleName();
-    private GankPresenter mGankPresenter;
     private HomeAdapter mAdapter;
-
-    public AndroidFragment() {
-        L.d();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        L.d();
-    }
 
     @Override
     protected void initRecyclerView(RecyclerView recyclerView) {
         super.initRecyclerView(recyclerView);
         recyclerView.setAdapter(mAdapter = new HomeAdapter());
-        mGankPresenter = new GankPresenter();
-        mGankPresenter.bindView(this);
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(this);
     }
 
     @Override
-    protected void loadData(int page) {
-        L.d(isRefreshing());
+    protected GankPresenter initPresenter() {
+        return new GankPresenter();
     }
 
     @Override
@@ -63,7 +51,7 @@ public class AndroidFragment extends BaseRefreshFragment implements GankContacts
 
     @Override
     protected void loadData() {
-        mGankPresenter.loadData();
+        mPresenter.loadData();
     }
 
     @Override
@@ -87,12 +75,6 @@ public class AndroidFragment extends BaseRefreshFragment implements GankContacts
     @Override
     public void onDetach() {
         super.onDetach();
-        L.d();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
         L.d();
     }
 

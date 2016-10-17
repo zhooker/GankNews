@@ -9,6 +9,7 @@ import com.example.ganknews.databinding.FragmentGirlItemBinding;
 import com.example.ganknews.gank.model.GankInfo;
 import com.example.ganknews.gank.presenter.GankGirlContacts;
 import com.example.ganknews.gank.presenter.GankGirlPresenter;
+import com.example.ganknews.gank.presenter.GankPresenter;
 
 import java.util.List;
 
@@ -16,24 +17,25 @@ import java.util.List;
  * Created by zhuangsj on 16-10-13.
  */
 
-public class GirlFragment extends BaseRefreshFragment implements GankGirlContacts.IGankView {
+public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> implements GankGirlContacts.IGankView {
 
     public static final String TAG = GirlFragment.class.getSimpleName();
-
-    private GankGirlPresenter mGankGirlPresenter;
     private HomeAdapter mAdapter;
 
     @Override
     protected void initRecyclerView(RecyclerView recyclerView) {
         super.initRecyclerView(recyclerView);
         recyclerView.setAdapter(mAdapter = new HomeAdapter());
-        mGankGirlPresenter = new GankGirlPresenter();
-        mGankGirlPresenter.bindView(this);
     }
 
     @Override
     protected void loadData() {
-        mGankGirlPresenter.loadData();
+        mPresenter.loadData();
+    }
+
+    @Override
+    protected GankGirlPresenter initPresenter() {
+        return new GankGirlPresenter();
     }
 
     @Override

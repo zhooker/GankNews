@@ -1,5 +1,6 @@
 package com.example.ganknews.gank.presenter;
 
+import com.example.ganknews.base.BasePresenter;
 import com.example.ganknews.gank.http.HttpHelper;
 import com.example.ganknews.gank.model.GankInfo;
 import com.example.ganknews.gank.model.GankInfoList;
@@ -23,19 +24,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by zhooker on 2016/10/11.
  */
 
-public class GankPresenter implements GankContacts.IGankPresenter {
-
-    private GankContacts.IGankView viewModle;
-    private CompositeSubscription compositeSubscription ;
-
-    public GankPresenter() {
-        compositeSubscription = new CompositeSubscription();
-    }
-
-    @Override
-    public void bindView(GankContacts.IGankView view) {
-        viewModle = view;
-    }
+public class GankPresenter extends BasePresenter<GankContacts.IGankView> implements GankContacts.IGankPresenter {
 
     @Override
     public void loadData() {
@@ -55,20 +44,15 @@ public class GankPresenter implements GankContacts.IGankPresenter {
 
                     @Override
                     public void onNext(GankInfoList user) {
-                        viewModle.refreshList(user != null ? user.getResults() : null);
+                        mView.refreshList(user != null ? user.getResults() : null);
                     }
                 });
-        compositeSubscription.add(subscription);
+        addSubscriiption(subscription);
     }
 
 
     @Override
     public void loadMoreData() {
 
-    }
-
-    @Override
-    public void finish() {
-        compositeSubscription.unsubscribe();
     }
 }

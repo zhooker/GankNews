@@ -1,5 +1,6 @@
 package com.example.ganknews.gank.presenter;
 
+import com.example.ganknews.base.BaseView;
 import com.example.ganknews.gank.model.GankInfo;
 
 import java.util.List;
@@ -9,17 +10,13 @@ import java.util.List;
  */
 
 public interface GankContacts {
-    interface IGankView {
+    interface IGankView extends BaseView {
         void refreshList(List<GankInfo> list);
     }
 
     interface IGankPresenter {
-        void bindView(IGankView view);
-
         void loadData();
 
         void loadMoreData();
-
-        void finish();
     }
 }
