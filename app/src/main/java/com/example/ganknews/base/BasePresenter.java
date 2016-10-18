@@ -1,5 +1,7 @@
 package com.example.ganknews.base;
 
+import android.content.Context;
+
 import com.example.ganknews.util.L;
 
 import rx.Subscription;
@@ -12,7 +14,12 @@ import rx.subscriptions.CompositeSubscription;
 public abstract class BasePresenter<T extends BaseView> {
 
     protected T mView;
+    protected Context mContext;
     private CompositeSubscription compositeSubscription;
+
+    public BasePresenter(Context context) {
+        mContext = context;
+    }
 
     public void attachView(T view) {
         mView = view;

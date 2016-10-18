@@ -1,5 +1,7 @@
 package com.example.ganknews.gank.presenter;
 
+import android.content.Context;
+
 import com.example.ganknews.base.BasePresenter;
 import com.example.ganknews.gank.http.HttpHelper;
 import com.example.ganknews.gank.model.GankInfo;
@@ -28,6 +30,10 @@ public class GankPresenter extends BasePresenter<GankContacts.IGankView> impleme
 
     private int currPage = 1;
 
+    public GankPresenter(Context context) {
+        super(context);
+    }
+
     @Override
     public void loadData() {
         currPage = 1;
@@ -41,7 +47,7 @@ public class GankPresenter extends BasePresenter<GankContacts.IGankView> impleme
     }
 
     private void loadDataByPage(final int page, final boolean addLast) {
-        Observable<GankInfoList> call = HttpHelper.getInstance(null).getGankInfoListCall("Android", 10, page);
+        Observable<GankInfoList> call = HttpHelper.getInstance(null).getGankInfoListCall(mContext, "Android", 10, page);
         Subscription subscription = call
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GankInfoList>() {

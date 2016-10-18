@@ -49,6 +49,13 @@ public abstract class BindingListAdapter<M, VB extends ViewDataBinding>
             mDatas.clear();
     }
 
+    public M getItem(int position) {
+        if (mDatas != null) {
+            return mDatas.get(position);
+        }
+        return null;
+    }
+
     @Override
     public BindingHolder<VB> onCreateViewHolder(ViewGroup parent, int viewType) {
         VB binding = DataBindingUtil.inflate(

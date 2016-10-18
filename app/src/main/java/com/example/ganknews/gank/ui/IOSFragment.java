@@ -38,7 +38,7 @@ public class IOSFragment extends BaseRefreshFragment<GankPresenter>
 
     @Override
     protected GankPresenter initPresenter() {
-        return new GankPresenter();
+        return new GankPresenter(getActivity());
     }
 
     @Override

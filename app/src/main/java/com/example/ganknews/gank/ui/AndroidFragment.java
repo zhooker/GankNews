@@ -1,6 +1,7 @@
 package com.example.ganknews.gank.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -32,15 +33,28 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
     protected void initRecyclerView(RecyclerView recyclerView) {
         super.initRecyclerView(recyclerView);
         recyclerView.setAdapter(mAdapter = new HomeAdapter());
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                L.d(position);
+
+                Intent intent = new Intent();
+                intent.putExtra(GankDetailActivity.LOAD_URL,
+                        ((HomeAdapter) recyclerView.getAdapter()).getItem(position).getUrl());
+                intent.setClass(getActivity(), GankDetailActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     protected GankPresenter initPresenter() {
-        return new GankPresenter();
+        return new GankPresenter(getActivity());
     }
 
     @Override
     public void refreshList(List<GankInfo> list) {
+        showContent();
         mAdapter.clear();
         mAdapter.addAll(list);
         mAdapter.notifyDataSetChanged();
@@ -49,6 +63,7 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
 
     @Override
     public void refreshMoreList(List<GankInfo> list) {
+        showContent();
         mAdapter.addLast(list);
         mAdapter.notifyDataSetChanged();
         setRefresh(false);

@@ -80,6 +80,11 @@ public abstract class BaseRefreshFragment<T extends BasePresenter> extends BaseF
         mSwitcher.setDisplayedChild(1);
     }
 
+    protected void showContent() {
+        if (mSwitcher.getDisplayedChild() != 0)
+            mSwitcher.setDisplayedChild(0);
+    }
+
     protected void loadData() {
 
     }
