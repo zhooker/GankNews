@@ -60,15 +60,16 @@ public class HttpHelper {
     }
 
     public OkHttpClient initHttpClient(final Context context) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
         File httpCacheDirectory = new File(context.getCacheDir(), "responses");
         int cacheSize = 10 * 1024 * 1024; // 10 MiB
         Cache cache = new Cache(httpCacheDirectory, cacheSize);
+        builder.cache(cache);
 
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.networkInterceptors().add(httpLoggingInterceptor);
-        builder.cache(cache);
 
         Interceptor interceptor = new Interceptor() {
             @Override
