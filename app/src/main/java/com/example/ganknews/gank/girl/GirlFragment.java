@@ -1,9 +1,16 @@
 package com.example.ganknews.gank.girl;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.ganknews.R;
 import com.example.ganknews.base.BaseRefreshFragment;
 import com.example.ganknews.base.BindingListAdapter;
@@ -44,6 +51,11 @@ public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> impleme
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected RecyclerView.LayoutManager getLayoutManager(Context context) {
+        return new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
     }
 
     @Override
@@ -89,8 +101,24 @@ public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> impleme
         }
 
         @Override
-        protected void onBindViewHolder(FragmentGirlItemBinding binding, GankInfo data) {
-            binding.setInfo(data);
+        protected void onBindViewHolder(final FragmentGirlItemBinding binding, GankInfo data) {
+            final ViewGroup.LayoutParams layoutParams = binding.itemContainer.getLayoutParams();
+            Glide.with(binding.itemContainer.getContext()).load(data.getUrl())
+                    .fitCenter()
+                    .placeholder(R.mipmap.ic_launcher)
+                    .crossFade()
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            ViewGroup parent = (ViewGroup) binding.itemContainer.getParent();
+                            layoutParams.width = parent != null ? parent.getWidth() / 2 : 500;//esource.getIntrinsicWidth();
+                            layoutParams.height = (int) (resource.getIntrinsicHeight() * layoutParams.width * 1.0f / resource.getIntrinsicWidth());
+                            L.d(layoutParams.height + "," + resource.getIntrinsicHeight() + ",width=" + layoutParams.width);
+                            binding.icon.setImageDrawable(resource);
+                        }
+                    });
+
+            //binding.setInfo(data);
         }
     }
 

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,13 +58,43 @@ public abstract class BaseRefreshFragment<T extends BasePresenter> extends BaseF
     }
 
     protected void initRecyclerView(RecyclerView recyclerView) {
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+        recyclerView.setLayoutManager(getLayoutManager(getActivity()));
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private boolean isScrollingEnd = false;
+
+            /**
+             * loadMore的两个重点：
+             * 1. 如何检测到已经滑到最后一项
+             * 2. 如何不要重复加载
+             */
             @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                setRefresh(true);
-                loadMoreData();
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (isRefreshing())
+                    isScrollingEnd = false;
+                else {
+                    int totalItemCount = recyclerView.getLayoutManager().getItemCount();
+                    int lastVisibleItemPosition = totalItemCount;
+                    if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+                        lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                                .findLastVisibleItemPosition();
+                    } else if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
+                        int[] array = ((StaggeredGridLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPositions(null);
+                        if (array != null)
+                            lastVisibleItemPosition = array[array.length - 1];
+                    }
+
+                    if (lastVisibleItemPosition >= totalItemCount - 1) {
+                        if (newState == RecyclerView.SCROLL_STATE_SETTLING)
+                            isScrollingEnd = true;
+                        if (newState == RecyclerView.SCROLL_STATE_IDLE && isScrollingEnd) {
+                            isScrollingEnd = false;
+                            if (lastVisibleItemPosition >= totalItemCount - 1) {
+                                setRefresh(true);
+                                loadMoreData();
+                            }
+                        }
+                    }
+                }
             }
         });
     }
@@ -77,12 +108,12 @@ public abstract class BaseRefreshFragment<T extends BasePresenter> extends BaseF
     @Override
     public void showError(int code) {
         setRefresh(false);
-        mSwitcher.setDisplayedChild(1);
+//        mSwitcher.setDisplayedChild(1);
     }
 
     protected void showContent() {
-        if (mSwitcher.getDisplayedChild() != 0)
-            mSwitcher.setDisplayedChild(0);
+//        if (mSwitcher.getDisplayedChild() != 0)
+//            mSwitcher.setDisplayedChild(0);
     }
 
     protected void loadData() {
@@ -91,6 +122,10 @@ public abstract class BaseRefreshFragment<T extends BasePresenter> extends BaseF
 
     protected void loadMoreData() {
 
+    }
+
+    protected RecyclerView.LayoutManager getLayoutManager(Context context) {
+        return new LinearLayoutManager(context);
     }
 
     protected boolean isRefreshing() {

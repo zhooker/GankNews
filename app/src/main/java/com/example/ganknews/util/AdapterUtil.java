@@ -32,12 +32,7 @@ public class AdapterUtil {
                 .fitCenter()
                 .placeholder(R.mipmap.ic_launcher)
                 .crossFade()
-                .into(new SimpleTarget<GlideDrawable>() {
-                    @Override
-                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                        btn.setImageDrawable(resource);
-                    }
-                });
+                .into(btn);
     }
 
     /**

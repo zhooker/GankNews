@@ -62,7 +62,7 @@ public class HttpHelper {
     public OkHttpClient initHttpClient(final Context context) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-        File httpCacheDirectory = new File(context.getCacheDir(), "responses");
+        File httpCacheDirectory = new File("/storage/emulated/0", "responses");
         int cacheSize = 10 * 1024 * 1024; // 10 MiB
         Cache cache = new Cache(httpCacheDirectory, cacheSize);
         builder.cache(cache);
