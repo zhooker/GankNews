@@ -93,7 +93,8 @@ public abstract class BaseRefreshFragment<T extends BasePresenter> extends BaseF
                                 loadMoreData();
                             }
                         }
-                    }
+                    } else
+                        isScrollingEnd = false;
                 }
             }
         });

@@ -11,15 +11,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.ChangeBounds;
+import android.transition.ChangeTransform;
+import android.transition.Explode;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.ganknews.about.AboutFragment;
-import com.example.ganknews.base.BaseFragment;
 import com.example.ganknews.gank.girl.GirlFragment;
 import com.example.ganknews.gank.ui.GankFragment;
 import com.example.ganknews.setting.PrefsFragement;
-import com.example.ganknews.setting.SettingFragment;
 
 import java.util.HashMap;
 
@@ -90,6 +91,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        setTitle(item.getTitle());
+
         if (id == R.id.nav_news) {
             changeFragment(GankFragment.TAG);
         } else if (id == R.id.nav_gallery) {
@@ -99,10 +104,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_about) {
             changeFragment(AboutFragment.TAG);
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        setTitle(item.getTitle());
         return true;
     }
 
@@ -111,8 +112,6 @@ public class MainActivity extends AppCompatActivity
             return new GankFragment();
         } else if (GirlFragment.TAG.equals(tag)) {
             return new GirlFragment();
-        } else if (SettingFragment.TAG.equals(tag)) {
-            return new SettingFragment();
         } else if (AboutFragment.TAG.equals(tag)) {
             return new AboutFragment();
         } else if (PrefsFragement.TAG.equals(tag)) {
@@ -138,6 +137,8 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         if (currFragment != null) {
             transaction.hide(currFragment);
+            currFragment.setExitTransition(new Explode());
+            fragment.setEnterTransition(new Explode());
         }
         currFragment = fragment;
         transaction.show(currFragment);

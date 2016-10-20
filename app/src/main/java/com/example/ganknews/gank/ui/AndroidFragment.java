@@ -3,6 +3,8 @@ package com.example.ganknews.gank.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -37,12 +39,14 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 L.d(position);
+                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(getActivity(), new Pair<>(v, "shared_element"));
 
                 Intent intent = new Intent();
                 intent.putExtra(GankDetailActivity.LOAD_URL,
                         ((HomeAdapter) recyclerView.getAdapter()).getItem(position).getUrl());
                 intent.setClass(getActivity(), GankDetailActivity.class);
-                startActivity(intent);
+                startActivity(intent, transitionActivityOptions.toBundle());
             }
         });
     }

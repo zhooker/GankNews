@@ -24,32 +24,40 @@ public class PrefsFragement extends PreferenceFragment implements SharedPreferen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        for(int x = 0; x < getPreferenceScreen().getPreferenceCount(); x++){
-            PreferenceCategory lol = (PreferenceCategory) getPreferenceScreen().getPreference(x);
-            for(int y = 0; y < lol.getPreferenceCount(); y++){
-                Preference pref = lol.getPreference(y);
-                pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
 
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        L.d(preference.getTitle());
-                        return false;
-                    }
+        Preference claeraCache = getPreferenceScreen().findPreference("settings_clearcache");
+        claeraCache.setSummary("300Kb");
+        claeraCache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
-                });
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                L.d(preference.getTitle());
+                preference.setSummary("0Kb");
+                return false;
             }
-        }
+
+        });
+
+        Preference version = getPreferenceScreen().findPreference("settings_version");
+        version.setSummary("1.0.0.0");
+        version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                L.d(preference.getTitle());
+                return false;
+            }
+
+        });
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         // remove dividers
         View rootView = getView();
         ListView list = (ListView) rootView.findViewById(android.R.id.list);
         list.setDivider(null);
-
     }
 
     @Override

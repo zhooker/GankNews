@@ -21,6 +21,7 @@
         android:foreground="?android:attr/selectableItemBackground"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true"
+        android:transitionName="shared_element"
         app:contentPadding="4dp">
 
         <LinearLayout

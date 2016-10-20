@@ -2,15 +2,12 @@ package com.example.ganknews.gank.girl;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.ganknews.R;
 import com.example.ganknews.base.BaseRefreshFragment;
 import com.example.ganknews.base.BindingListAdapter;
@@ -19,10 +16,8 @@ import com.example.ganknews.databinding.FragmentGirlItemBinding;
 import com.example.ganknews.gank.model.GankInfo;
 import com.example.ganknews.gank.presenter.GankGirlContacts;
 import com.example.ganknews.gank.presenter.GankGirlPresenter;
-import com.example.ganknews.gank.presenter.GankPresenter;
-import com.example.ganknews.gank.ui.AndroidFragment;
-import com.example.ganknews.gank.ui.GankDetailActivity;
 import com.example.ganknews.util.L;
+import com.example.ganknews.util.TransitionHelper;
 
 import java.util.List;
 
@@ -43,7 +38,6 @@ public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> impleme
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 L.d(position);
-
                 Intent intent = new Intent();
                 intent.putExtra(GirlDetailActivity.LOAD_URL,
                         ((GirlFragment.HomeAdapter) recyclerView.getAdapter()).getItem(position).getUrl());
@@ -102,23 +96,20 @@ public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> impleme
 
         @Override
         protected void onBindViewHolder(final FragmentGirlItemBinding binding, GankInfo data) {
-            final ViewGroup.LayoutParams layoutParams = binding.itemContainer.getLayoutParams();
-            Glide.with(binding.itemContainer.getContext()).load(data.getUrl())
-                    .fitCenter()
-                    .placeholder(R.mipmap.ic_launcher)
-                    .crossFade()
-                    .into(new SimpleTarget<GlideDrawable>() {
-                        @Override
-                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            ViewGroup parent = (ViewGroup) binding.itemContainer.getParent();
-                            layoutParams.width = parent != null ? parent.getWidth() / 2 : 500;//esource.getIntrinsicWidth();
-                            layoutParams.height = (int) (resource.getIntrinsicHeight() * layoutParams.width * 1.0f / resource.getIntrinsicWidth());
-                            L.d(layoutParams.height + "," + resource.getIntrinsicHeight() + ",width=" + layoutParams.width);
-                            binding.icon.setImageDrawable(resource);
-                        }
-                    });
-
-            //binding.setInfo(data);
+            binding.setInfo(data);
+//            Glide.with(binding.icon.getContext()).load(data.getUrl())
+//                    .fitCenter()
+//                    .into(new SimpleTarget<GlideDrawable>() {
+//                        @Override
+//                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+//                            int width = 500;
+//                            int height = (int) (resource.getIntrinsicHeight() * width * 1.0f / resource.getIntrinsicWidth());
+//                            ViewGroup.LayoutParams params = binding.itemContainer.getLayoutParams();
+//                            params.width = width;
+//                            params.height = height;
+//                            binding.icon.setImageDrawable(resource);
+//                        }
+//                    });
         }
     }
 

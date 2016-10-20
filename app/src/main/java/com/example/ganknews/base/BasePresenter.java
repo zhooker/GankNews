@@ -32,10 +32,6 @@ public abstract class BasePresenter<T extends BaseView> {
 
     protected void addSubscriiption(Subscription subscription) {
         if (compositeSubscription == null)
-            L.d();
-        else
-            L.d(compositeSubscription.hasSubscriptions());
-        if (compositeSubscription == null)
             compositeSubscription = new CompositeSubscription();
         else
             compositeSubscription.clear();
