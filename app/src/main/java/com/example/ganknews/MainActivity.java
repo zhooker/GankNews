@@ -2,14 +2,18 @@ package com.example.ganknews;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.transition.ChangeBounds;
 import android.transition.ChangeTransform;
@@ -21,15 +25,30 @@ import com.example.ganknews.about.AboutFragment;
 import com.example.ganknews.gank.girl.GirlFragment;
 import com.example.ganknews.gank.ui.GankFragment;
 import com.example.ganknews.setting.PrefsFragement;
+import com.example.ganknews.util.L;
 
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String TAG = "FRAGMENT_ID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            boolean isNight = getPreferences(MODE_PRIVATE).getBoolean("night", false);
+            if (!isNight) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+            recreate();
+        } else {
+            L.d(savedInstanceState.getInt(TAG));
+        }
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -44,8 +63,13 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        navigationView.setCheckedItem(R.id.nav_news);
-        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_news));
+        if (savedInstanceState != null) {
+            navigationView.setCheckedItem(savedInstanceState.getInt(TAG));
+            onNavigationItemSelected(navigationView.getMenu().findItem(savedInstanceState.getInt(TAG)));
+        } else {
+            navigationView.setCheckedItem(R.id.nav_news);
+            onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_news));
+        }
     }
 
     @Override
@@ -78,11 +102,33 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_night) {
+            changeNightMode();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        L.d(currFragmentID);
+        clearFragment();
+        outState.putInt(TAG, currFragmentID);
+        super.onSaveInstanceState(outState);
+    }
+
+    private void changeNightMode() {
+        SharedPreferences sp = getPreferences(MODE_PRIVATE);
+        boolean isNight = sp.getBoolean("night", false);
+        if (isNight) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            sp.edit().putBoolean("night", false).commit();
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            sp.edit().putBoolean("night", true).commit();
+        }
+        recreate();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -95,56 +141,66 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         setTitle(item.getTitle());
 
-        if (id == R.id.nav_news) {
-            changeFragment(GankFragment.TAG);
-        } else if (id == R.id.nav_gallery) {
-            changeFragment(GirlFragment.TAG);
-        } else if (id == R.id.nav_setting) {
-            changeFragment(PrefsFragement.TAG);
-        } else if (id == R.id.nav_about) {
-            changeFragment(AboutFragment.TAG);
-        }
+        changeFragment(id);
         return true;
     }
 
-    private Fragment createBaseFragment(String tag) {
-        if (GankFragment.TAG.equals(tag)) {
+
+    private Fragment createBaseFragment(int id) {
+        if (id == R.id.nav_news) {
             return new GankFragment();
-        } else if (GirlFragment.TAG.equals(tag)) {
+        } else if (id == R.id.nav_gallery) {
             return new GirlFragment();
-        } else if (AboutFragment.TAG.equals(tag)) {
-            return new AboutFragment();
-        } else if (PrefsFragement.TAG.equals(tag)) {
+        } else if (id == R.id.nav_setting) {
             return new PrefsFragement();
+        } else if (id == R.id.nav_about) {
+            return new AboutFragment();
         }
         return null;
     }
 
-    private void changeFragment(String tag) {
-        Fragment fragment = fragments.get(tag);
-        if (fragment == null) {
-            fragment = createBaseFragment(tag);
-            if (fragment == null)
-                return;
-            getFragmentManager().beginTransaction().add(R.id.content_main, fragment).commitAllowingStateLoss();
-            fragments.put(tag, fragment);
-        }
-        if (currFragment != fragment)
+    private void changeFragment(int id) {
+        Fragment fragment = getFragmentManager().findFragmentByTag(String.valueOf(id));
+        if (fragment == null)
+            fragment = createBaseFragment(id);
+        if (!fragment.isAdded())
+            getFragmentManager().beginTransaction().add(R.id.content_main, fragment, String.valueOf(id)).commitAllowingStateLoss();
+        if (id != currFragmentID) {
             replaceFragment(fragment);
+            currFragmentID = id;
+        }
     }
 
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        if (currFragment != null) {
-            transaction.hide(currFragment);
-            currFragment.setExitTransition(new Explode());
-            fragment.setEnterTransition(new Explode());
+        Fragment curr = getFragmentManager().findFragmentByTag(String.valueOf(currFragmentID));
+        if (curr != null) {
+            transaction.hide(curr);
+            curr.setExitTransition(new Explode());
+
         }
-        currFragment = fragment;
-        transaction.show(currFragment);
+        if (fragment != null) {
+            fragment.setEnterTransition(new Explode());
+            transaction.show(fragment);
+        }
         transaction.commitAllowingStateLoss();
     }
 
-    private HashMap<String, Fragment> fragments = new HashMap<>(5);
-    private Fragment currFragment;
+    private void clearFragment() {
+        int[] ids = new int[]{
+                R.id.nav_news,
+                R.id.nav_gallery,
+                R.id.nav_setting,
+                R.id.nav_about
+        };
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        for (int i = 0; i < ids.length; i++) {
+            Fragment fragment = getFragmentManager().findFragmentByTag(String.valueOf(ids[i]));
+            if (fragment != null)
+                transaction.remove(fragment);
+        }
+        transaction.commitAllowingStateLoss();
+    }
+
+    private int currFragmentID;
 }
