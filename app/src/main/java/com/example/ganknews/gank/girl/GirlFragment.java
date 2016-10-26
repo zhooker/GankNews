@@ -2,6 +2,7 @@ package com.example.ganknews.gank.girl;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
@@ -54,6 +55,7 @@ public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> impleme
 
     @Override
     protected void loadData() {
+        super.loadData();
         mPresenter.loadData();
     }
 
@@ -113,4 +115,10 @@ public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> impleme
         }
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        L.d(isVisible);
+        loadData();
+    }
 }

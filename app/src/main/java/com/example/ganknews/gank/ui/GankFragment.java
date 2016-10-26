@@ -2,7 +2,6 @@ package com.example.ganknews.gank.ui;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -46,24 +45,10 @@ public class GankFragment extends BaseFragment {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-    }
 
     @Override
     protected void loadData() {
 
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
     }
 
     //FragmentPagerAdapter

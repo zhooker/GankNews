@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             }
             recreate();
-        } else {
-            L.d(savedInstanceState.getInt(TAG));
         }
         super.onCreate(savedInstanceState);
 
@@ -64,9 +62,11 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState != null) {
+            L.d("last index = "+checkID(savedInstanceState.getInt(TAG)));
             navigationView.setCheckedItem(savedInstanceState.getInt(TAG));
             onNavigationItemSelected(navigationView.getMenu().findItem(savedInstanceState.getInt(TAG)));
         } else {
+            L.d("last index = "+null);
             navigationView.setCheckedItem(R.id.nav_news);
             onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_news));
         }
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         L.d(currFragmentID);
-        clearFragment();
+        //clearFragment();
         outState.putInt(TAG, currFragmentID);
         super.onSaveInstanceState(outState);
     }
@@ -184,6 +184,20 @@ public class MainActivity extends AppCompatActivity
             transaction.show(fragment);
         }
         transaction.commitAllowingStateLoss();
+    }
+
+    private int checkID(int id) {
+        int[] ids = new int[]{
+                R.id.nav_news,
+                R.id.nav_gallery,
+                R.id.nav_setting,
+                R.id.nav_about
+        };
+        for (int i = 0; i < ids.length; i++) {
+            if (ids[i] == id)
+                return i + 1;
+        }
+        return -1;
     }
 
     private void clearFragment() {

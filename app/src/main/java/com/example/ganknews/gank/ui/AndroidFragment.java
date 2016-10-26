@@ -76,6 +76,7 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
     @Override
     protected void loadData() {
         L.d();
+        super.loadData();
         mPresenter.loadData();
     }
 
@@ -108,11 +109,5 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
     public void onAttach(Context context) {
         super.onAttach(context);
         L.d();
-    }
-
-    @Override
-    public void onDestroy() {
-        L.d();
-        super.onDestroy();
     }
 }

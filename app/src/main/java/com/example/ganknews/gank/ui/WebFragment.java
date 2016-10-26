@@ -28,12 +28,12 @@ public class WebFragment extends BaseRefreshFragment<GankPresenter>
         implements GankContacts.IGankView {
 
     public static final String TAG = WebFragment.class.getSimpleName();
-    private AndroidFragment.HomeAdapter mAdapter;
+    private WebFragment.HomeAdapter mAdapter;
 
     @Override
     protected void initRecyclerView(RecyclerView recyclerView) {
         super.initRecyclerView(recyclerView);
-        recyclerView.setAdapter(mAdapter = new AndroidFragment.HomeAdapter());
+        recyclerView.setAdapter(mAdapter = new WebFragment.HomeAdapter());
     }
 
     @Override
@@ -59,6 +59,7 @@ public class WebFragment extends BaseRefreshFragment<GankPresenter>
     @Override
     protected void loadData() {
         L.d();
+        super.loadData();
         mPresenter.loadData();
     }
 

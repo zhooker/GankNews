@@ -54,6 +54,7 @@ public abstract class BaseRefreshFragment<T extends BasePresenter> extends BaseF
     @Override
     public void onDestroy() {
         super.onDestroy();
+        setRefresh(false);
         mPresenter.detachView();
     }
 
@@ -102,7 +103,6 @@ public abstract class BaseRefreshFragment<T extends BasePresenter> extends BaseF
 
     @Override
     public void onRefresh() {
-        setRefresh(true);
         loadData();
     }
 
@@ -118,7 +118,7 @@ public abstract class BaseRefreshFragment<T extends BasePresenter> extends BaseF
     }
 
     protected void loadData() {
-
+        setRefresh(true);
     }
 
     protected void loadMoreData() {
