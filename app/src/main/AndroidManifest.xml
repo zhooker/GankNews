@@ -36,6 +36,9 @@
             android:label="@string/title_activity_girl_detail"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <meta-data
+            android:name="com.example.ganknews.util.SimpleGlideModule"
+            android:value="GlideModule" />
     </application>
 
 </manifest>

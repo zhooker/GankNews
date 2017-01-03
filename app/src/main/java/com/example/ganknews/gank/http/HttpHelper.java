@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.ganknews.App;
 import com.example.ganknews.gank.model.GankInfoList;
 import com.example.ganknews.util.AdapterUtil;
+import com.example.ganknews.util.Constant;
 import com.example.ganknews.util.L;
 
 import java.io.File;
@@ -62,7 +63,7 @@ public class HttpHelper {
     public OkHttpClient initHttpClient(final Context context) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-        File httpCacheDirectory = new File("/storage/emulated/0", "responses");
+        File httpCacheDirectory = new File(Constant.CACHE_DIR, Constant.HTTP_CAHCE);
         int cacheSize = 10 * 1024 * 1024; // 10 MiB
         Cache cache = new Cache(httpCacheDirectory, cacheSize);
         builder.cache(cache);
