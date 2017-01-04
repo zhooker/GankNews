@@ -2,21 +2,14 @@ package com.example.ganknews;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.transition.ChangeBounds;
-import android.transition.ChangeTransform;
 import android.transition.Explode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,8 +20,6 @@ import com.example.ganknews.gank.ui.GankFragment;
 import com.example.ganknews.setting.PrefsFragement;
 import com.example.ganknews.util.L;
 
-import java.util.HashMap;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -36,17 +27,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            boolean isNight = getPreferences(MODE_PRIVATE).getBoolean("night", false);
-            if (!isNight) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            }
-            recreate();
-        }
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -90,7 +71,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -100,13 +81,6 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_night) {
-            changeNightMode();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -116,19 +90,6 @@ public class MainActivity extends AppCompatActivity
         //clearFragment();
         outState.putInt(TAG, currFragmentID);
         super.onSaveInstanceState(outState);
-    }
-
-    private void changeNightMode() {
-        SharedPreferences sp = getPreferences(MODE_PRIVATE);
-        boolean isNight = sp.getBoolean("night", false);
-        if (isNight) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            sp.edit().putBoolean("night", false).commit();
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            sp.edit().putBoolean("night", true).commit();
-        }
-        recreate();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

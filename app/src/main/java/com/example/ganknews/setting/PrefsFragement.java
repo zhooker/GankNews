@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.example.ganknews.R;
 import com.example.ganknews.base.BaseFragment;
 import com.example.ganknews.util.Constant;
+import com.example.ganknews.util.DayNightHelper;
 import com.example.ganknews.util.FileUtil;
 import com.example.ganknews.util.L;
 
@@ -96,6 +97,10 @@ public class PrefsFragement extends PreferenceFragment implements SharedPreferen
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         L.d(key);
+        if (key.equals(getString(R.string.setting_key_day_night))) {
+            DayNightHelper.setNightMode(sharedPreferences.getBoolean(key, false));
+            getActivity().recreate();
+        }
     }
 
     @Override

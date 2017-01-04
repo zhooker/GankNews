@@ -1,8 +1,8 @@
 package com.example.ganknews;
 
 import android.app.Application;
-import android.content.Context;
-import android.support.v7.app.AppCompatDelegate;
+
+import com.example.ganknews.util.DayNightHelper;
 
 
 /**
@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatDelegate;
 
 public class App extends Application {
     public void onCreate() {
+        DayNightHelper.setNightModeBySetting(this);
         super.onCreate();
     }
 }

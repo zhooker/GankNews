@@ -4,7 +4,7 @@
     <PreferenceCategory android:title="常规">
         <CheckBoxPreference
             android:icon="@drawable/ic_menu_slideshow"
-            android:key="settings_night"
+            android:key="@string/setting_key_day_night"
             android:summary="这是夜间模式"
             android:title="夜间模式" />
     </PreferenceCategory>

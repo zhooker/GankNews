@@ -9,4 +9,7 @@
     <string name="list_empty">empty!</string>
     <string name="title_activity_gank_detail">GankDetailActivity</string>
     <string name="title_activity_girl_detail">GirlDetailActivity</string>
+
+    // settings key
+    <string name="setting_key_day_night">settings_night</string>
 </resources>
