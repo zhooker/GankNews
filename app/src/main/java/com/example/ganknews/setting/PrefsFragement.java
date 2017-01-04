@@ -8,7 +8,9 @@ import android.preference.PreferenceFragment;
 import android.view.View;
 import android.widget.ListView;
 
+import com.bumptech.glide.Glide;
 import com.example.ganknews.R;
+import com.example.ganknews.base.BaseFragment;
 import com.example.ganknews.util.Constant;
 import com.example.ganknews.util.FileUtil;
 import com.example.ganknews.util.L;
@@ -27,6 +29,14 @@ public class PrefsFragement extends PreferenceFragment implements SharedPreferen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            L.d(null);
+        } else if (getParentFragment() == null) {
+            L.d(savedInstanceState.getBoolean(BaseFragment.VISIBILITY));
+            if (!savedInstanceState.getBoolean(BaseFragment.VISIBILITY))
+                getFragmentManager().beginTransaction().hide(this).commitAllowingStateLoss();
+        }
+
         addPreferencesFromResource(R.xml.preferences);
 
         mClaeraCache = getPreferenceScreen().findPreference("settings_clearcache");
@@ -63,6 +73,12 @@ public class PrefsFragement extends PreferenceFragment implements SharedPreferen
         View rootView = getView();
         ListView list = (ListView) rootView.findViewById(android.R.id.list);
         list.setDivider(null);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(BaseFragment.VISIBILITY, isVisible());
     }
 
     @Override
@@ -137,7 +153,7 @@ public class PrefsFragement extends PreferenceFragment implements SharedPreferen
         @Override
         protected Void doInBackground(Void... params) {
             FileUtil.deleteFiles(Constant.CACHE_DIR + File.separator + Constant.HTTP_CAHCE);
-            FileUtil.deleteFiles(Constant.CACHE_DIR + File.separator + Constant.IMAGE_CACHE);
+            Glide.get(getActivity()).clearDiskCache();
             return null;
         }
 
