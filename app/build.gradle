@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 24
@@ -19,6 +20,11 @@ android {
     }
     dataBinding {
         enabled = true
+    }
+    greendao {
+        schemaVersion 1
+        daoPackage 'com.example.ganknews.db'
+        targetGenDir 'src/main/java'
     }
 }
 
@@ -45,6 +51,9 @@ dependencies {
     //image
     compile 'com.github.bumptech.glide:glide:3.7.0'
     //compile 'com.github.bumptech.glide:okhttp-integration:1.4.0@aar'
+
+    // database
+    compile 'org.greenrobot:greendao:3.2.0'
 
     // debug
     // compile 'com.facebook.stetho:stetho:1.4.1'

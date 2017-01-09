@@ -75,16 +75,20 @@ public abstract class BaseRefreshFragment<T extends BasePresenter> extends BaseF
                 else {
                     int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                     int lastVisibleItemPosition = totalItemCount;
+                    int firstVisibleItemPosition = 0;
                     if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
                         lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
                                 .findLastVisibleItemPosition();
+                        firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                                .findFirstVisibleItemPosition();
                     } else if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
                         int[] array = ((StaggeredGridLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPositions(null);
-                        if (array != null)
+                        if (array != null) {
                             lastVisibleItemPosition = array[array.length - 1];
+                            firstVisibleItemPosition = array[0];
+                        }
                     }
-
-                    if (lastVisibleItemPosition >= totalItemCount - 1) {
+                    if (firstVisibleItemPosition != 0 && lastVisibleItemPosition >= totalItemCount - 1) {
                         if (newState == RecyclerView.SCROLL_STATE_SETTLING)
                             isScrollingEnd = true;
                         if (newState == RecyclerView.SCROLL_STATE_IDLE && isScrollingEnd) {

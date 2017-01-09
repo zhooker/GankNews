@@ -1,11 +1,25 @@
 package com.example.ganknews.gank.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.SerializedName;
+
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Unique;
+
 /**
  * Created by zhooker on 2016/10/11.
  */
-
-public class GankInfo {
-    private String _id;
+@Entity
+public class GankInfo implements Parcelable {
+    @Id(autoincrement = true)
+    private Long id;
+    @Unique
+    @SerializedName("_id")
+    private String guid;
     private String createdAt;
     private String desc;
     private String publishedAt;
@@ -15,16 +29,73 @@ public class GankInfo {
     private String used;
     private String who;
 
-    public String get_id() {
-        return _id;
+    @Override
+    public String toString() {
+        return "GankInfo{" +
+                "id=" + id +
+                ", guid='" + guid +
+                ", who='" + who +
+                '}';
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(guid);
+        dest.writeString(createdAt);
+        dest.writeString(desc);
+        dest.writeString(publishedAt);
+        dest.writeString(type);
+        dest.writeString(url);
+        dest.writeString(used);
+        dest.writeString(who);
+    }
+
+    //实现反序列化，从Parcel解析出来
+    public static final Parcelable.Creator<GankInfo> CREATOR = new Creator<GankInfo>() {
+
+        @Override
+        public GankInfo[] newArray(int size) {
+            return new GankInfo[size];
+        }
+
+        @Override
+        public GankInfo createFromParcel(Parcel source) {
+            GankInfo info = new GankInfo();
+            info.setGuid(source.readString());
+            info.setCreatedAt(source.readString());
+            info.setDesc(source.readString());
+            info.setPublishedAt(source.readString());
+            info.setType(source.readString());
+            info.setUrl(source.readString());
+            info.setUsed(source.readString());
+            info.setWho(source.readString());
+            return info;
+        }
+    };
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getGuid() {
+        return this.guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 
     public String getCreatedAt() {
-        return createdAt;
+        return this.createdAt;
     }
 
     public void setCreatedAt(String createdAt) {
@@ -32,7 +103,7 @@ public class GankInfo {
     }
 
     public String getDesc() {
-        return desc;
+        return this.desc;
     }
 
     public void setDesc(String desc) {
@@ -40,7 +111,7 @@ public class GankInfo {
     }
 
     public String getPublishedAt() {
-        return publishedAt;
+        return this.publishedAt;
     }
 
     public void setPublishedAt(String publishedAt) {
@@ -48,7 +119,7 @@ public class GankInfo {
     }
 
     public String getSource() {
-        return source;
+        return this.source;
     }
 
     public void setSource(String source) {
@@ -56,7 +127,7 @@ public class GankInfo {
     }
 
     public String getType() {
-        return type;
+        return this.type;
     }
 
     public void setType(String type) {
@@ -64,7 +135,7 @@ public class GankInfo {
     }
 
     public String getUrl() {
-        return url;
+        return this.url;
     }
 
     public void setUrl(String url) {
@@ -72,7 +143,7 @@ public class GankInfo {
     }
 
     public String getUsed() {
-        return used;
+        return this.used;
     }
 
     public void setUsed(String used) {
@@ -80,10 +151,30 @@ public class GankInfo {
     }
 
     public String getWho() {
-        return who;
+        return this.who;
     }
 
     public void setWho(String who) {
         this.who = who;
     }
+
+    @Generated(hash = 1445507222)
+    public GankInfo(Long id, String guid, String createdAt, String desc, String publishedAt,
+            String source, String type, String url, String used, String who) {
+        this.id = id;
+        this.guid = guid;
+        this.createdAt = createdAt;
+        this.desc = desc;
+        this.publishedAt = publishedAt;
+        this.source = source;
+        this.type = type;
+        this.url = url;
+        this.used = used;
+        this.who = who;
+    }
+
+    @Generated(hash = 1682206697)
+    public GankInfo() {
+    }
 }
+

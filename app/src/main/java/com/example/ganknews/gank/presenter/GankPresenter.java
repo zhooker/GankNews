@@ -19,6 +19,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -50,7 +51,17 @@ public class GankPresenter extends BasePresenter<GankContacts.IGankView> impleme
         Observable<GankInfoList> call = HttpHelper.getInstance(null).getGankInfoListCall(mContext, "Android", 10, page);
         Subscription subscription = call
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GankInfoList>() {
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<GankInfoList, Observable<List<GankInfo>>>() {
+                    @Override
+                    public Observable<List<GankInfo>> call(GankInfoList gankInfoList) {
+                        if(gankInfoList.isError()) {
+
+                        }
+                        return Observable.just(gankInfoList.getResults());
+                    }
+                })
+                .subscribe(new Subscriber<List<GankInfo>>() {
                     @Override
                     public void onCompleted() {
                         L.d();
@@ -63,11 +74,11 @@ public class GankPresenter extends BasePresenter<GankContacts.IGankView> impleme
                     }
 
                     @Override
-                    public void onNext(GankInfoList user) {
+                    public void onNext(List<GankInfo> user) {
                         if (addLast)
-                            mView.refreshMoreList(user != null ? user.getResults() : null);
+                            mView.refreshMoreList(user != null ? user: null);
                         else
-                            mView.refreshList(user != null ? user.getResults() : null);
+                            mView.refreshList(user != null ? user: null);
                     }
                 });
         addSubscriiption(subscription);

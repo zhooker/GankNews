@@ -1,6 +1,8 @@
 package com.example.ganknews.gank.ui;
 
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
@@ -15,13 +17,21 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.example.ganknews.App;
 import com.example.ganknews.R;
+import com.example.ganknews.db.DaoSession;
+import com.example.ganknews.db.GankInfoDao;
+import com.example.ganknews.gank.model.GankInfo;
 import com.example.ganknews.util.L;
+
+import java.util.List;
 
 public class GankDetailActivity extends AppCompatActivity {
 
     public static final String LOAD_URL = "web_load_url";
     private WebView mWebView;
+    private GankInfo mGankInfo;
+    private FloatingActionButton mFloatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,20 +40,47 @@ public class GankDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mGankInfo = (GankInfo) getIntent().getParcelableExtra(LOAD_URL);
+
+        DaoSession daoSession = ((App) getApplication()).getDaoSession();
+        final GankInfoDao noteDao = daoSession.getGankInfoDao();
+
+        mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                List<GankInfo> infos = noteDao.queryBuilder().where(GankInfoDao.Properties.Guid.eq(mGankInfo.getGuid())).list();
+                if(infos != null && infos.size() > 0) {
+                    noteDao.deleteInTx(infos);
+                    Snackbar.make(view, "已删除～", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    changeFloatingActionButtonColor(false);
+                } else {
+                    noteDao.insertOrReplace(mGankInfo);
+                    Snackbar.make(view, "已收藏～", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    changeFloatingActionButtonColor(true);
+                }
             }
         });
+
+        List<GankInfo> infos = noteDao.queryBuilder().where(GankInfoDao.Properties.Guid.eq(mGankInfo.getGuid())).list();
+        changeFloatingActionButtonColor(infos != null && infos.size() > 0);
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         mWebView = (WebView) findViewById(R.id.webview);
-        initWebView(getIntent().getStringExtra(LOAD_URL));
+        initWebView(mGankInfo);
+    }
+
+    private void changeFloatingActionButtonColor(boolean isSaved) {
+        if(isSaved) {
+            mFloatingActionButton.setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
+        } else {
+            mFloatingActionButton.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
+        }
     }
 
     @Override
@@ -58,14 +95,14 @@ public class GankDetailActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initWebView(String url) {
+    private void initWebView(GankInfo info) {
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setSupportZoom(true);
         //webSettings.setUseWideViewPort(true);
         mWebView.setWebViewClient(mWebViewClientBase);
         mWebView.setWebChromeClient(mWebChromeClientBase);
-        mWebView.loadUrl(url);
+        mWebView.loadUrl(this.mGankInfo.getUrl());
     }
 
     @Override

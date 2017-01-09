@@ -22,6 +22,10 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
+                    android:id="@+id/nav_favorite"
+                    android:icon="@drawable/ic_menu_favorite"
+                    android:title="收藏" />
+                <item
                     android:id="@+id/nav_setting"
                     android:icon="@drawable/ic_menu_manage"
                     android:title="设置" />

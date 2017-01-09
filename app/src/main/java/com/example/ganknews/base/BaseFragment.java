@@ -51,6 +51,7 @@ public abstract class BaseFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         isPrepraed = true;
+        L.d("isVisible:" + isVisible + ",isLoaded1:" + isLoaded1);
         if (isVisible && !isLoaded1) {
             loadData();
             isLoaded1 = true;

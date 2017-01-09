@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.ganknews.about.AboutFragment;
+import com.example.ganknews.favorite.FavoriteFragment;
 import com.example.ganknews.gank.girl.GirlFragment;
 import com.example.ganknews.gank.ui.GankFragment;
 import com.example.ganknews.setting.PrefsFragement;
@@ -116,6 +117,8 @@ public class MainActivity extends AppCompatActivity
             return new PrefsFragement();
         } else if (id == R.id.nav_about) {
             return new AboutFragment();
+        } else if (id == R.id.nav_favorite) {
+            return new FavoriteFragment();
         }
         return null;
     }
