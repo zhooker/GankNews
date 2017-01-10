@@ -19,10 +19,13 @@ import android.webkit.WebViewClient;
 
 import com.example.ganknews.App;
 import com.example.ganknews.R;
+import com.example.ganknews.db.DaoManager;
 import com.example.ganknews.db.DaoSession;
 import com.example.ganknews.db.GankInfoDao;
 import com.example.ganknews.gank.model.GankInfo;
 import com.example.ganknews.util.L;
+
+import org.greenrobot.greendao.query.DeleteQuery;
 
 import java.util.List;
 
@@ -42,7 +45,7 @@ public class GankDetailActivity extends AppCompatActivity {
 
         mGankInfo = (GankInfo) getIntent().getParcelableExtra(LOAD_URL);
 
-        DaoSession daoSession = ((App) getApplication()).getDaoSession();
+        DaoSession daoSession = DaoManager.getInstance().getDaoSession();
         final GankInfoDao noteDao = daoSession.getGankInfoDao();
 
         mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
@@ -51,7 +54,7 @@ public class GankDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 List<GankInfo> infos = noteDao.queryBuilder().where(GankInfoDao.Properties.Guid.eq(mGankInfo.getGuid())).list();
                 if(infos != null && infos.size() > 0) {
-                    noteDao.deleteInTx(infos);
+                    noteDao.queryBuilder().where(GankInfoDao.Properties.Guid.eq(mGankInfo.getGuid())).buildDelete().executeDeleteWithoutDetachingEntities();
                     Snackbar.make(view, "已删除～", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     changeFloatingActionButtonColor(false);

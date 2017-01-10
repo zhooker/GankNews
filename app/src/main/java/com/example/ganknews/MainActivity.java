@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.ganknews.about.AboutFragment;
+import com.example.ganknews.db.DaoManager;
 import com.example.ganknews.favorite.FavoriteFragment;
 import com.example.ganknews.gank.girl.GirlFragment;
 import com.example.ganknews.gank.ui.GankFragment;
@@ -91,6 +92,12 @@ public class MainActivity extends AppCompatActivity
         //clearFragment();
         outState.putInt(TAG, currFragmentID);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DaoManager.getInstance().closeConnection();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

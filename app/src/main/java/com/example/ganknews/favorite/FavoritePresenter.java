@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.ganknews.App;
 import com.example.ganknews.base.BasePresenter;
+import com.example.ganknews.db.DaoManager;
 import com.example.ganknews.db.DaoSession;
 import com.example.ganknews.db.GankInfoDao;
 import com.example.ganknews.gank.http.HttpHelper;
@@ -33,7 +34,7 @@ public class FavoritePresenter extends BasePresenter<FavoriteContacts.IFavoriteV
 
     @Override
     public void loadData() {
-        DaoSession daoSession = ((App) mContext.getApplicationContext()).getDaoSession();
+        DaoSession daoSession = DaoManager.getInstance().getDaoSession();
         GankInfoDao noteDao = daoSession.getGankInfoDao();
         List<GankInfo> users = noteDao.loadAll();
         mView.refreshList(users);
