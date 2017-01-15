@@ -1,22 +1,18 @@
 package com.example.ganknews.gank.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 
-import com.example.ganknews.App;
-import com.example.ganknews.BR;
 import com.example.ganknews.R;
 import com.example.ganknews.base.BaseRefreshFragment;
 import com.example.ganknews.base.BindingListAdapter;
 import com.example.ganknews.base.ItemClickSupport;
 import com.example.ganknews.databinding.FragmentListItemBinding;
-import com.example.ganknews.db.DaoSession;
-import com.example.ganknews.db.GankInfoDao;
 import com.example.ganknews.gank.model.GankInfo;
 import com.example.ganknews.gank.presenter.GankContacts;
 import com.example.ganknews.gank.presenter.GankPresenter;
@@ -32,7 +28,26 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
         implements GankContacts.IGankView {
 
     public static final String TAG = AndroidFragment.class.getSimpleName();
+    public static final String PARAM = "PARAMS";
     private HomeAdapter mAdapter;
+
+    public static AndroidFragment newInstance(String args) {
+        AndroidFragment result  = new AndroidFragment();
+        if(!TextUtils.isEmpty(args)) {
+            Bundle bundle = new Bundle();
+            bundle.putString(PARAM, args);
+            result.setArguments(bundle);
+        }
+        return result;
+    }
+
+    @Override
+    protected GankPresenter initPresenter() {
+        if (getArguments() != null) {
+            return new GankPresenter(getActivity(),getArguments().getString(PARAM));
+        }
+        return new GankPresenter(getActivity());
+    }
 
     @Override
     protected void initRecyclerView(RecyclerView recyclerView) {
@@ -52,11 +67,6 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
                 startActivity(intent, transitionActivityOptions.toBundle());
             }
         });
-    }
-
-    @Override
-    protected GankPresenter initPresenter() {
-        return new GankPresenter(getActivity());
     }
 
     @Override
@@ -100,17 +110,5 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
         protected void onBindViewHolder(FragmentListItemBinding binding, GankInfo data) {
             binding.setInfo(data);
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        L.d();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        L.d();
     }
 }

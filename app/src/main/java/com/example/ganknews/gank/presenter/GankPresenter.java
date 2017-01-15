@@ -30,9 +30,15 @@ import rx.subscriptions.CompositeSubscription;
 public class GankPresenter extends BasePresenter<GankContacts.IGankView> implements GankContacts.IGankPresenter {
 
     private int currPage = 1;
+    private String id;
 
     public GankPresenter(Context context) {
         super(context);
+    }
+
+    public GankPresenter(Context context,String arg) {
+        super(context);
+        id = arg;
     }
 
     @Override
@@ -48,7 +54,7 @@ public class GankPresenter extends BasePresenter<GankContacts.IGankView> impleme
     }
 
     private void loadDataByPage(final int page, final boolean addLast) {
-        Observable<GankInfoList> call = HttpHelper.getInstance(null).getGankInfoListCall(mContext, "Android", 10, page);
+        Observable<GankInfoList> call = HttpHelper.getInstance(null).getGankInfoListCall(mContext, this.id, 10, page);
         Subscription subscription = call
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -12,6 +12,7 @@ import com.example.ganknews.base.BaseRefreshFragment;
 import com.example.ganknews.base.BindingListAdapter;
 import com.example.ganknews.base.ItemClickSupport;
 import com.example.ganknews.databinding.FragmentListItemBinding;
+import com.example.ganknews.favorite.presenter.FavoriteContacts;
 import com.example.ganknews.gank.model.GankInfo;
 import com.example.ganknews.gank.ui.GankDetailActivity;
 import com.example.ganknews.util.L;

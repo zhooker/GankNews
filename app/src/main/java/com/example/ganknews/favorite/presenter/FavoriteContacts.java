@@ -1,4 +1,4 @@
-package com.example.ganknews.favorite;
+package com.example.ganknews.favorite.presenter;
 
 import com.example.ganknews.base.BasePresenter;
 import com.example.ganknews.base.BaseView;
