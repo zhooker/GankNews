@@ -5,11 +5,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
-import android.transition.TransitionManager;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.ganknews.R;
@@ -45,13 +42,17 @@ public class GirlDetailActivity extends AppCompatActivity {
 
     private void initImageView(String url) {
         AdapterUtil.updateText(imageView, url);
+//        Glide.with(imageView.getContext()).load(url)
+//                .fitCenter()
+//                .error(R.mipmap.ic_launcher)
+//                .into(imageView);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -6,7 +6,7 @@ android {
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.example.ganknews"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -54,6 +54,9 @@ dependencies {
 
     // database
     compile 'org.greenrobot:greendao:3.2.0'
+
+    // photo
+    compile 'com.bm.photoview:library:1.4.1'
 
     // debug
     // compile 'com.facebook.stetho:stetho:1.4.1'

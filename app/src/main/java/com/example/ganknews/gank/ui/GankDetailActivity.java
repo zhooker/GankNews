@@ -43,7 +43,7 @@ public class GankDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mGankInfo = (GankInfo) getIntent().getParcelableExtra(LOAD_URL);
+        mGankInfo = getIntent().getParcelableExtra(LOAD_URL);
 
         DaoSession daoSession = DaoManager.getInstance().getDaoSession();
         final GankInfoDao noteDao = daoSession.getGankInfoDao();

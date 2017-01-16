@@ -12,4 +12,7 @@
 
     // settings key
     <string name="setting_key_day_night">settings_night</string>
+
+    // element name
+    <string name="transition_name_image">share_image</string>
 </resources>

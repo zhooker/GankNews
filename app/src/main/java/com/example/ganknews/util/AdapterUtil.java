@@ -14,9 +14,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.LruBitmapPool;
 import com.bumptech.glide.load.engine.cache.LruResourceCache;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.SizeReadyCallback;
+import com.bumptech.glide.request.target.Target;
 import com.example.ganknews.R;
+
+import java.util.Locale;
 
 /**
  * Created by zhuangsj on 16-10-13.
@@ -35,8 +40,31 @@ public class AdapterUtil {
     public static void updateText(final ImageView btn, String url) {
         Glide.with(btn.getContext()).load(url)
                 .fitCenter()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(R.mipmap.ic_launcher)
-                .into(btn);
+                .listener(new LoggingListener<String, GlideDrawable>())
+                .into(new SimpleTarget<GlideDrawable>() {
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                        btn.setImageDrawable(resource);
+                    }
+                });
+
+
+    }
+
+    // 示例: .listener(new LoggingListener<String, GlideDrawable>())
+    public static class LoggingListener<T, R> implements RequestListener<T, R> {
+        @Override public boolean onException(Exception e, Object model, Target target, boolean isFirstResource) {
+            android.util.Log.d("GLIDE", String.format(Locale.ROOT,
+                    "onException(%s, %s, %s, %s)", e, model, target, isFirstResource), e);
+            return false;
+        }
+        @Override public boolean onResourceReady(Object resource, final Object model, Target target, boolean isFromMemoryCache, boolean isFirstResource) {
+            android.util.Log.d("GLIDE", String.format(Locale.ROOT,
+                    "onResourceReady(%s, %s, %s, %s, %s)", resource, model, target, isFromMemoryCache, isFirstResource));
+            return false;
+        }
     }
 
     /**

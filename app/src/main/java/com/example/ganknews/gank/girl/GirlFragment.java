@@ -1,12 +1,12 @@
 package com.example.ganknews.gank.girl;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.transition.ChangeBounds;
 import android.view.View;
 
 import com.example.ganknews.R;
@@ -18,7 +18,6 @@ import com.example.ganknews.gank.model.GankInfo;
 import com.example.ganknews.gank.presenter.GankGirlContacts;
 import com.example.ganknews.gank.presenter.GankGirlPresenter;
 import com.example.ganknews.util.L;
-import com.example.ganknews.util.TransitionHelper;
 
 import java.util.List;
 
@@ -43,7 +42,11 @@ public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> impleme
                 intent.putExtra(GirlDetailActivity.LOAD_URL,
                         ((GirlFragment.HomeAdapter) recyclerView.getAdapter()).getItem(position).getUrl());
                 intent.setClass(getActivity(), GirlDetailActivity.class);
-                startActivity(intent);
+                ActivityOptions option = ActivityOptions
+                        .makeSceneTransitionAnimation(getActivity(), v, getString(R.string.transition_name_image));
+                setExitTransition(new ChangeBounds());
+                setEnterTransition(new ChangeBounds());
+                startActivity(intent, option.toBundle());
             }
         });
     }
@@ -83,6 +86,7 @@ public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> impleme
 
     @Override
     public void refreshMoreList(List<GankInfo> list) {
+
         showContent();
         mAdapter.addLast(list);
         mAdapter.notifyDataSetChanged();
@@ -100,7 +104,6 @@ public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> impleme
         protected void onBindViewHolder(final FragmentGirlItemBinding binding, GankInfo data) {
             binding.setInfo(data);
 //            Glide.with(binding.icon.getContext()).load(data.getUrl())
-//                    .fitCenter()
 //                    .into(new SimpleTarget<GlideDrawable>() {
 //                        @Override
 //                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
@@ -109,6 +112,7 @@ public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> impleme
 //                            ViewGroup.LayoutParams params = binding.itemContainer.getLayoutParams();
 //                            params.width = width;
 //                            params.height = height;
+//                            L.d(resource.getIntrinsicHeight() + "x" +  resource.getIntrinsicWidth());
 //                            binding.icon.setImageDrawable(resource);
 //                        }
 //                    });
