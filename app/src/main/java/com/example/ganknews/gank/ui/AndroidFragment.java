@@ -6,6 +6,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.example.ganknews.R;
@@ -32,8 +33,8 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
     private HomeAdapter mAdapter;
 
     public static AndroidFragment newInstance(String args) {
-        AndroidFragment result  = new AndroidFragment();
-        if(!TextUtils.isEmpty(args)) {
+        AndroidFragment result = new AndroidFragment();
+        if (!TextUtils.isEmpty(args)) {
             Bundle bundle = new Bundle();
             bundle.putString(PARAM, args);
             result.setArguments(bundle);
@@ -44,7 +45,7 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
     @Override
     protected GankPresenter initPresenter() {
         if (getArguments() != null) {
-            return new GankPresenter(getActivity(),getArguments().getString(PARAM));
+            return new GankPresenter(getActivity(), getArguments().getString(PARAM));
         }
         return new GankPresenter(getActivity());
     }
@@ -57,7 +58,6 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 GankInfo info = ((HomeAdapter) recyclerView.getAdapter()).getItem(position);
-                L.d(position);
                 ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.
                         makeSceneTransitionAnimation(getActivity(), new Pair<>(v, "shared_element"));
 
@@ -71,32 +71,33 @@ public class AndroidFragment extends BaseRefreshFragment<GankPresenter>
 
     @Override
     public void refreshList(List<GankInfo> list) {
-        showContent();
         mAdapter.clear();
         mAdapter.addAll(list);
         mAdapter.notifyDataSetChanged();
-        setRefresh(false);
+        loadDataResult(true);
     }
 
     @Override
     public void refreshMoreList(List<GankInfo> list) {
-        showContent();
         mAdapter.addLast(list);
         mAdapter.notifyDataSetChanged();
-        setRefresh(false);
+        loadDataResult(true);
     }
 
     @Override
     protected void loadData() {
-        L.d();
-        super.loadData();
         mPresenter.loadData();
     }
 
     @Override
     protected void loadMoreData() {
-        L.d();
         mPresenter.loadMoreData();
+    }
+
+    @Override
+    protected void L(String log) {
+        final String tag = getClass().getSimpleName();
+        Log.d(L.TAG, tag + ",id=" + (getArguments().getString(PARAM)) + "  :  " + log);
     }
 
     static class HomeAdapter extends BindingListAdapter<GankInfo, FragmentListItemBinding> {

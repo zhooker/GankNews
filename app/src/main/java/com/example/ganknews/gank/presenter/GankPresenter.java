@@ -47,6 +47,9 @@ public class GankPresenter extends BasePresenter<GankContacts.IGankView> impleme
         loadDataByPage(currPage, false);
     }
 
+    public String getId() {
+        return id;
+    }
 
     @Override
     public void loadMoreData() {

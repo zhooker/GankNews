@@ -75,22 +75,19 @@ public class GirlFragment extends BaseRefreshFragment<GankGirlPresenter> impleme
 
     @Override
     public void refreshList(List<GankInfo> list) {
-        showContent();
         mAdapter.clear();
         for (GankInfo info : list) {
             mAdapter.add(info);
         }
         mAdapter.notifyDataSetChanged();
-        setRefresh(false);
+        loadDataResult(true);
     }
 
     @Override
     public void refreshMoreList(List<GankInfo> list) {
-
-        showContent();
         mAdapter.addLast(list);
         mAdapter.notifyDataSetChanged();
-        setRefresh(false);
+        loadDataResult(true);
     }
 
     static class HomeAdapter extends BindingListAdapter<GankInfo, FragmentGirlItemBinding> {

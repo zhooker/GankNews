@@ -52,12 +52,6 @@ public class GankFragment extends BaseFragment implements View.OnClickListener {
         refreshTabs(tabList);
     }
 
-
-    @Override
-    protected void loadData() {
-
-    }
-
     @Override
     public void onClick(View v) {
         int id = v.getId();

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.example.ganknews.R;
@@ -55,17 +56,14 @@ public class FavoriteFragment extends BaseRefreshFragment<FavoritePresenter>
 
     @Override
     public void refreshList(List<GankInfo> list) {
-        showContent();
         mAdapter.clear();
         mAdapter.addAll(list);
         mAdapter.notifyDataSetChanged();
-        setRefresh(false);
+        loadDataResult(true);
     }
 
     @Override
     protected void loadData() {
-        L.d();
-        super.loadData();
         mPresenter.loadData();
     }
 
@@ -100,17 +98,5 @@ public class FavoriteFragment extends BaseRefreshFragment<FavoritePresenter>
         protected void onBindViewHolder(FragmentListItemBinding binding, GankInfo data) {
             binding.setInfo(data);
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        L.d();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        L.d();
     }
 }

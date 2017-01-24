@@ -112,17 +112,23 @@ public abstract class BaseRefreshFragment<T extends BasePresenter> extends BaseF
 
     @Override
     public void showError(int code) {
-        setRefresh(false);
-//        mSwitcher.setDisplayedChild(1);
+        loadDataResult(false);
     }
 
-    protected void showContent() {
-//        if (mSwitcher.getDisplayedChild() != 0)
-//            mSwitcher.setDisplayedChild(0);
+    @Override
+    protected void loadDataResult(boolean result) {
+        super.loadDataResult(result);
+        setRefresh(false);
+    }
+
+    @Override
+    protected void readyToloadData() {
+        setRefresh(true);
+        super.readyToloadData();
     }
 
     protected void loadData() {
-        setRefresh(true);
+
     }
 
     protected void loadMoreData() {
